@@ -10,3 +10,5 @@ pyvenv.cfg
 *.pyd
 .venv
 .idea
+db.sqlite3
+*.sqlite3
