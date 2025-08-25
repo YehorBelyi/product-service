@@ -1,0 +1,33 @@
+{% extends 'product_service/template.html' %}
+
+{% block title %} Login {% endblock %}
+
+{% block container %}
+	<div class="container text-center mt-3">
+		<form action="" method="post" class="custom-form">
+			<h2 class="mt-3">Welcome</h2>
+			{% csrf_token %}
+			{% if form.non_field_errors %}
+				<div class="alert alert-danger mt-3" role="alert">
+					{% for error in form.non_field_errors %}
+						{{ error }}
+					{% endfor %}
+				</div>
+			{% endif %}
+			{% for field in form %}
+				<div class="mb-3">
+					<label>{{ field.label_tag }}</label>
+					{{ field }}
+					{% for error in field.errors %}
+						<div class="form-text">{{ error }}</div>
+					{% endfor %}
+				</div>
+			{% endfor %}
+			<button type="submit" class="btn mb-3">Login</button>
+
+			<div class="separator"></div>
+
+			<a href="{% url 'register' %}" class="btn btn-secondary mb-3">I don't have an account</a>
+		</form>
+	</div>
+{% endblock %}
