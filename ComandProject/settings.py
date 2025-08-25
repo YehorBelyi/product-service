@@ -40,6 +40,8 @@ INSTALLED_APPS = [
     'ProductService.apps.ProductserviceConfig',
 ]
 
+AUTH_USER_MODEL = "ProductService.CustomUser"
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
