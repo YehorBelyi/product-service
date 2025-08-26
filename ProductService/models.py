@@ -12,7 +12,6 @@ class CustomUser(AbstractUser):
     def __str__(self):
         return self.username
 
-
 class Listing(models.Model):
     user = ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='listings')
     product_name = models.CharField(max_length=100)
