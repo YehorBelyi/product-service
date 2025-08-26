@@ -23,13 +23,17 @@ class Listing(models.Model):
     user = ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='listings')
     product_name = models.CharField(max_length=100)
     product_desc = models.TextField(default="", blank=True)
-    category = models.CharField(max_length=50)
-    cost = models.FloatField(validators=[MinValueValidator(0)])
+    category = models.ForeignKey(ProductCategory, on_delete=models.CASCADE, related_name='listings')
+    cost = models.DecimalField(max_digits=10, decimal_places=2, validators=[MinValueValidator(0)])
     stock = models.PositiveIntegerField(default=0)
 
     def __str__(self):
         return f"Listing of {self.product_name} by {self.user} in {self.category} category"
 
+
+def get_image_upload_path(instance, filename):
+    return f'listing/images/{instance.listing.id}/{filename}'
+
 class ProductImages(models.Model):
-    Listing = ForeignKey(Listing, on_delete=models.CASCADE, related_name='product_images')
-    image = models.ImageField(upload_to='listing/images/')
+    listing = ForeignKey(Listing, on_delete=models.CASCADE, related_name='product_images')
+    image = models.ImageField(upload_to=get_image_upload_path)
