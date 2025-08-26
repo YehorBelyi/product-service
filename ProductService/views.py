@@ -1,3 +1,4 @@
+from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render, redirect
@@ -109,7 +110,6 @@ class ListingSearchView(View):
 
             return render(req, self.template_name, context={'form': form, 'listings': listings, 'page_obj': page_obj})
 
-
 class ListingCreateView(LoginRequiredMixin, View):
     template_name = 'product_service/app/listing_create.html'
 
@@ -149,3 +149,45 @@ class ListingCreateView(LoginRequiredMixin, View):
         }
 
         return render(req, self.template_name, context)
+
+class ProfileView(View):
+    template_name = 'product_service/account/profile.html'
+
+    def get(self, request):
+        user = request.user
+        return render(request, self.template_name, {'user': user})
+
+    def post(self, request):
+        user = request.user
+
+        first_name = request.POST.get("first_name", "").strip()
+        last_name = request.POST.get("last_name", "").strip()
+        email = request.POST.get("email", "").strip()
+        phone = request.POST.get("phone", "").strip()
+        photo = request.FILES.get("photo")
+
+        errors = []
+        if not first_name:
+            errors.append("First name cannot be empty.")
+        if not last_name:
+            errors.append("Last name cannot be empty.")
+        if email and "@" not in email:
+            errors.append("Invalid email address.")
+        if phone and not phone.startswith("+") and not phone[1:].isdigit():
+            errors.append("Phone must start with '+' and contain digits only.")
+
+        if errors:
+            for error in errors:
+                messages.error(request, error)
+            return render(request, self.template_name, {'user': user})
+
+        user.first_name = first_name
+        user.last_name = last_name
+        user.email = email
+        user.phone_number = phone
+        if photo:
+            user.photo = photo
+        user.save()
+
+        messages.success(request, "Profile updated successfully!")
+        return redirect("profile")
