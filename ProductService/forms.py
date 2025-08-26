@@ -135,10 +135,6 @@ class ListingCreateForm(forms.ModelForm):
             'placeholder': 'Stock quantity'
         })
     )
-    
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.fields['category'].choices = [(category.name, category.name) for category in ProductCategory.objects.all()]
 
     class Meta:
         model = Listing
