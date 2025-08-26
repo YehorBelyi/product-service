@@ -13,17 +13,16 @@ class CustomUser(AbstractUser):
         return self.username
 
 
+
 class Listing(models.Model):
     user = ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='listings')
     product_name = models.CharField(max_length=100)
     product_desc = models.TextField(default="", blank=True)
-    category = models.CharField(max_length=50)
+    category = models.ManyToManyField(ProductCategory, related_name='listings')
     cost = models.FloatField(validators=[MinValueValidator(0)])
     stock = models.PositiveIntegerField(default=0)
 
     def __str__(self):
         return f"Listing of {self.product_name} by {self.user} in {self.category} category"
 
-class ProductImages(models.Model):
-    Listing = ForeignKey(Listing, on_delete=models.CASCADE, related_name='product_images')
-    image = models.ImageField(upload_to='listing/images/')
+

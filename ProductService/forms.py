@@ -64,3 +64,31 @@ class RegisterForm(forms.ModelForm):
             if CustomUser.objects.filter(username=username).exists():
                 raise forms.ValidationError("User with this username already exists!")
             return username
+
+
+class ListingSearchForm(forms.Form):
+    name = forms.CharField(
+        label = "Product name",
+        required=False,
+        widget=forms.TextInput(attrs={
+            'class': 'search-name-input',
+            'placeholder': 'Product name',
+            'autocomplet': 'off'
+        })
+    )
+    max_price = forms.DecimalField(
+        label = "Maximum product price",
+        required=False,
+        min_value=0,
+        widget=forms.NumberInput(attrs={
+            'class': 'search-price-input',
+            'placeholder': 'Up to'
+        })
+    )
+    category = forms.MultipleChoiceField(
+        label="Product category",
+        required=False,
+        widget=forms.CheckboxSelectMultiple(attrs={
+
+        })
+    )

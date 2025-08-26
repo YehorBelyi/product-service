@@ -91,6 +91,6 @@ def get(self, req):
         if form.is_valid():
             form_data = form.cleaned_data
             name = form_data.get('name')
-            max_price = form_data.get('max_price')
+            
 
         render(req, self.template_name, context={'form': form, 'listings': listings, 'page_obj': page_obj})
