@@ -1,7 +1,8 @@
-<nav class="navbar bg-body-tertiary">
+<nav class="navbar">
 	<div class="container-fluid">
 		<div class="left-controls">
 			<a class="navbar-brand" href="{% url 'home' %}">Home</a>
+			<a class="navbar-brand" href="{% url 'listing-search' %}">Search</a>
 		</div>
 		<div class="logo text-center ">
 			<p>
@@ -16,7 +17,7 @@
 						Profile
 					</button>
 					<ul class="dropdown-menu">
-						<li><a class="dropdown-item" href="#">Details</a></li>
+						<li><a class="dropdown-item" href="{% url 'profile' %}">Details</a></li>
 						<li><a class="dropdown-item" href="{% url 'logout' %}">Logout</a></li>
 					</ul>
 				</div>
