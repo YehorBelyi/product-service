@@ -78,19 +78,28 @@ class RegisterView(View):
         return render(request, self.template_name, context)
 
 
-class ListingSearch(View):
+class ListingSearchView(View):
     template_name = 'product_service\\app\\listing_search.html'
 
-def get(self, req):
-        form = ListingSearchForm(req.GET or None)
-        listings = Listing.objects.all()
-        paginator = Paginator(listings, 10)
-        page_number = req.GET.get('page', 1)
-        page_obj = paginator.get_page(page_number)
+    def get(self, req):
+            form = ListingSearchForm(req.GET or None)
+            listings = Listing.objects.all()
 
-        if form.is_valid():
-            form_data = form.cleaned_data
-            name = form_data.get('name')
-            
+            if form.is_valid():
+                form_data = form.cleaned_data
+                name = form_data.get('name')
+                max_price = form_data.get('max_price')
+                categories = form_data.get('category')
 
-        render(req, self.template_name, context={'form': form, 'listings': listings, 'page_obj': page_obj})
+                if name:
+                    listings = listings.filter(product_name__icontains=name)
+                if max_price:
+                    listings = listings.filter(cost__lte=max_price)
+                if categories:
+                    listings = listings.filter(category__in=categories)
+
+            paginator = Paginator(listings, 10)
+            page_number = req.GET.get('page', 1)
+            page_obj = paginator.get_page(page_number)
+
+            render(req, self.template_name, context={'form': form, 'listings': listings, 'page_obj': page_obj})

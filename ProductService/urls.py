@@ -3,5 +3,5 @@ from django.urls import path
 from ProductService import views
 
 urlpatterns = [
-    # path()
+    path('listing/search', views.ListingSearchView.as_view(), name='listing-search')
 ]
