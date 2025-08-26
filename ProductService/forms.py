@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.models import User
 from ProductService.models import CustomUser
-from ProductService.models import CustomUser, ProductCategory
+from ProductService.models import CustomUser, ProductCategory, Listing, ProductImages
 from django.core.validators import RegexValidator
 
 phone_validator = RegexValidator(
@@ -74,7 +74,7 @@ class ListingSearchForm(forms.Form):
         widget=forms.TextInput(attrs={
             'class': 'search-name-input',
             'placeholder': 'Product name',
-            'autocomplet': 'off'
+            'autocomplete': 'off'
         })
     )
     max_price = forms.DecimalField(
@@ -86,14 +86,86 @@ class ListingSearchForm(forms.Form):
             'placeholder': 'Up to'
         })
     )
-    category = forms.MultipleChoiceField(
+    category = forms.ModelMultipleChoiceField(
         label="Product category",
         required=False,
-        widget=forms.CheckboxSelectMultiple(attrs={
+        queryset=ProductCategory.objects.all(),
+        widget=forms.SelectMultiple(attrs={
             'class': 'search-categories-input'
         })
     )
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.fields['category'].choices = [(category.name, category.name) for category in ProductCategory.objects.all()]
+
+class ListingCreateForm(forms.ModelForm):
+    product_name = forms.CharField(
+        label='Product name',
+        max_length=100,
+        widget=forms.TextInput(attrs={
+            'class': 'listing-create-name',
+            'placeholder': 'Enter product name'
+        })
+    )
+    product_desc = forms.CharField(
+        label='Product description',
+        required=False,
+        widget=forms.Textarea(attrs={
+            'class': 'listing-create-desc',
+            'placeholder': 'Enter product description'
+        })
+    )
+    category = forms.ModelChoiceField(
+        label='Product Category',
+        queryset=ProductCategory.objects.all(),
+        widget=forms.Select(attrs={
+            'class': 'listing-create-categories'
+        })
+    )
+    cost = forms.DecimalField(
+        label='Product price',
+        min_value=0,
+        widget=forms.NumberInput(attrs={
+            'class': 'listing-create-price',
+            'placeholder': 'Price'
+        })
+    )
+    stock = forms.IntegerField(
+        label='Product stock quantity',
+        min_value=0,
+        widget=forms.NumberInput(attrs={
+            'class': 'listing-create-stock',
+            'placeholder': 'Stock quantity'
+        })
+    )
+
+    class Meta:
+        model = Listing
+        fields = ['product_name', 'product_desc', 'category', 'cost', 'stock']
+
+
+class ProductImageForm(forms.ModelForm):
+    class Meta:
+        model = ProductImages
+        fields = ['image']
+
+    def clean_image(self):
+        image = self.cleaned_data.get('image')
+        if image:
+            if image.size > 5 * 1024 * 1024:
+                raise forms.ValidationError("Image file too large (max 5MB).")
+            if not image.content_type.startswith('image/'):
+                raise forms.ValidationError("File must be an image.")
+        return image
+
+ProductImagesFormSet = forms.inlineformset_factory(
+    Listing,
+    ProductImages,
+    fields=['image'],
+    extra=3,
+    can_delete=True,
+    widgets={
+        'image': forms.FileInput(attrs={
+            'class': 'listing-create-image',
+            'accept': 'image/*'
+        })
+    }
+)
