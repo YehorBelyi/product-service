@@ -1,0 +1,28 @@
+{% extends 'product_service/template.html' %}
+
+{% block title %} Create Listing | Go&Buy {% endblock %}
+
+{% block container %}
+    <div class="listing-create-container">
+        <h2>Listing create form</h2>
+        {% for message in messages %}
+            <p class="listing-create-message {{message.tags}}">{{message}}</p>
+        {% endfor %}
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <h3>Upload Images</h3>
+            {{ images_form.management_form }}
+            {% for form in images_form %}
+                <div class="listing-image-form">
+                    {{form.as_p}}
+                    {% if form.instance.pk %}
+                        <input type="checkbox" name="{{ form.prefix }}-DELETE" id="{{ form.prefix }}-DELETE">
+                        <label for="{{ form.prefix }}-DELETE">Delete this image</label>
+                    {% endif %}
+                </div>
+            {% endfor %}
+            {{listing_form.as_p}}
+            <button type="submit" class="listing-create-button">Create Listing</button>
+        </form>
+    </div>
+{% endblock %}

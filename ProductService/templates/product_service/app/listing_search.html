@@ -11,21 +11,38 @@
         <button type="submit">Search</button>
     </form>
     <div class="listing-list">
-        {% if listings %}
-            {% for listing in listings %}
-                <div class="listing-review">
-                    {% with main_image=listing.product_images.first %}
-                        {% if first_image %}
-                            <img src="{{ main_image.image.url }}" alt="{{ listing.product_name }} image" class="listing-review-image">
-                        {% else %}
-                            <p>No image available</p>
-                        {% endif %}
-                    {% endwith %}
-                    <h2 class="listing-review-title">{{listing.product_name}}</h2>
-                    <p class="listing-review-categories">{{listing.category}}</p>
-                    <p class="listing-review-price">{{listing.cost}}</p>
-                </div>
-            {% endfor %}
+        {% for listing in listings %}
+            <div class="listing-review">
+                {% with main_image=listing.product_images.first %}
+                    {% if first_image %}
+                        <img src="{{ main_image.image.url }}" alt="{{ listing.product_name }} image" class="listing-review-image">
+                    {% else %}
+                        <p>No image available</p>
+                    {% endif %}
+                {% endwith %}
+                <h2 class="listing-review-title">{{listing.product_name}}</h2>
+                <p class="listing-review-categories">{{listing.category}}</p>
+                <p class="listing-review-price">{{listing.cost}}</p>
+            </div>
+        {% empty %}
+            <p class="search-empty">No listings found.</p>
+        {% endfor %}
+        {% if page_obj.has_other_pages %}
+            <div class="pagination">
+                {% if page_obj.has_previous %}
+                    <a href="?page={{ page_obj.previous_page_number }}">Previous</a>
+                {% endif %}
+                {% for num in page_obj.paginator.page_range %}
+                    {% if page_obj.number == num %}
+                        <span>{{ num }}</span>
+                    {% else %}
+                        <a href="?page={{ num }}">{{ num }}</a>
+                    {% endif %}
+                {% endfor %}
+                {% if page_obj.has_next %}
+                    <a href="?page={{ page_obj.next_page_number }}">Next</a>
+                {% endif %}
+            </div>
         {% endif %}
     </div>
 </div>

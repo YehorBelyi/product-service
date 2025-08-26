@@ -2,11 +2,13 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render, redirect
+from django.urls import reverse_lazy, reverse
+from django.contrib import messages
 from django.views.generic import View
 from ProductService.forms import LoginForm, RegisterForm
 from django.core.paginator import Paginator
 from django.views.generic import View
-from ProductService.forms import LoginForm, RegisterForm, ListingSearchForm
+from ProductService.forms import LoginForm, RegisterForm, ListingSearchForm, ListingCreateForm, ProductImagesFormSet
 from ProductService.models import Listing
 
 # Create your views here.
@@ -83,7 +85,7 @@ class RegisterView(View):
 
 
 class ListingSearchView(View):
-    template_name = 'product_service\\app\\listing_search.html'
+    template_name = 'product_service//app//listing_search.html'
 
     def get(self, req):
             form = ListingSearchForm(req.GET or None)
@@ -107,6 +109,46 @@ class ListingSearchView(View):
             page_obj = paginator.get_page(page_number)
 
             return render(req, self.template_name, context={'form': form, 'listings': listings, 'page_obj': page_obj})
+
+class ListingCreateView(LoginRequiredMixin, View):
+    template_name = 'product_service/app/listing_create.html'
+
+    def get(self, req):
+        listing_form = ListingCreateForm()
+        images_form = ProductImagesFormSet()
+        context={
+            'listing_form': listing_form,
+            'images_form': images_form
+        }
+        return render(req, self.template_name, context)
+
+    def post(self, req):
+        listing_form = ListingCreateForm(req.POST)
+        images_form = ProductImagesFormSet(req.POST, req.FILES)
+
+        if listing_form.is_valid():
+            listing_form.instance.user = req.user
+            listing = listing_form.save()
+            images_form = ProductImagesFormSet(req.POST, req.FILES, instance=listing)
+            if images_form.is_valid():
+                images_form.save()
+                messages.success(req, 'Listing created successfully!')
+                return redirect(reverse('listing-search'))
+            else:
+                messages.error(req, 'Please add correct images to listing!')
+                context = {
+                    'listing_form': listing_form,
+                    'images_form': images_form
+                }
+                return render(req, self.template_name, context)
+
+        messages.error(req, 'Please add correct information to listing form')
+        context = {
+            'listing_form': listing_form,
+            'images_form': images_form
+        }
+
+        return render(req, self.template_name, context)
 
 class ProfileView(View):
     template_name = 'product_service/account/profile.html'
