@@ -1,0 +1,28 @@
+<nav class="navbar bg-body-tertiary">
+	<div class="container-fluid">
+		<div class="left-controls">
+			<a class="navbar-brand" href="{% url 'home' %}">Home</a>
+		</div>
+		<div class="logo text-center ">
+			<p>
+				<span class="logo-text">go</span>&<span class="logo-text">buy</span>
+			</p>
+		</div>
+		<div class="right-controls">
+			{% if user.is_authenticated %}
+				<div class="dropdown">
+					<button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown"
+							aria-expanded="false">
+						Profile
+					</button>
+					<ul class="dropdown-menu">
+						<li><a class="dropdown-item" href="#">Details</a></li>
+						<li><a class="dropdown-item" href="{% url 'logout' %}">Logout</a></li>
+					</ul>
+				</div>
+			{% else %}
+				<a href="{% url 'login' %}" class="navbar-brand btn">Login</a>
+			{% endif %}
+		</div>
+	</div>
+</nav>
