@@ -13,6 +13,14 @@ class CustomUser(AbstractUser):
         return self.username
 
 
+
+class ProductCategory(models.Model):
+    name = models.CharField(max_length=50)
+
+class ProductImages(models.Model):
+    Listing = ForeignKey(Listing, on_delete=models.CASCADE, related_name='product_images')
+    image = models.ImageField(upload_to='listing/images/')
+
 class Listing(models.Model):
     user = ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='listings')
     product_name = models.CharField(max_length=100)
@@ -23,7 +31,3 @@ class Listing(models.Model):
 
     def __str__(self):
         return f"Listing of {self.product_name} by {self.user} in {self.category} category"
-
-class ProductImages(models.Model):
-    Listing = ForeignKey(Listing, on_delete=models.CASCADE, related_name='product_images')
-    image = models.ImageField(upload_to='listing/images/')
