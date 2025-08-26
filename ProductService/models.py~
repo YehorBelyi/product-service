@@ -18,7 +18,7 @@ class Listing(models.Model):
     product_name = models.CharField(max_length=100)
     product_desc = models.TextField(default="", blank=True)
     category = models.CharField(max_length=50)
-    cost = models.FloatField(validators={MinValueValidator(0)})
+    cost = models.FloatField(validators=[MinValueValidator(0)])
     stock = models.PositiveIntegerField(default=0)
 
     def __str__(self):
