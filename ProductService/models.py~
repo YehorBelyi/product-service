@@ -19,7 +19,7 @@ class Listing(models.Model):
     product_desc = models.TextField(default="", blank=True)
     category = models.CharField(max_length=50)
     cost = models.FloatField(validators={MinValueValidator(0)})
-    stock = models.PositiveIntegerField(default=0)
+    stock = models.PositiveIntegerField()
 
     def __str__(self):
         return f"Listing of {self.product_name} by {self.user} in {self.category} category"
