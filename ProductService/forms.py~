@@ -1,7 +1,6 @@
 from django import forms
 from django.contrib.auth.models import User
 from ProductService.models import CustomUser
-from ProductService.models import CustomUser, ProductCategory
 from django.core.validators import RegexValidator
 
 phone_validator = RegexValidator(

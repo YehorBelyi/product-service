@@ -1,0 +1,32 @@
+{% extends 'product_service/template.html' %}
+
+{% block title %} Home Page {% endblock %}
+
+{% block container %}
+<div class="search-container">
+    <h2>Listing Search</h2>
+    <form method="get">
+        {% csrf_token %}
+        {{form.as_p}}
+        <button type="submit">Search</button>
+    </form>
+    <div class="listing-list">
+        {% if listings %}
+            {% for listing in listings %}
+                <div class="listing-review">
+                    {% with main_image=listing.product_images.first %}
+                        {% if first_image %}
+                            <img src="{{ main_image.image.url }}" alt="{{ listing.product_name }} image" class="listing-review-image">
+                        {% else %}
+                            <p>No image available</p>
+                        {% endif %}
+                    {% endwith %}
+                    <h2 class="listing-review-title">{{listing.product_name}}</h2>
+                    <p class="listing-review-categories">{{listing.category}}</p>
+                    <p class="listing-review-price">{{listing.cost}}</p>
+                </div>
+            {% endfor %}
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
