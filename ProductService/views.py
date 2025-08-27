@@ -104,7 +104,7 @@ class ListingSearchView(View):
                 if max_price:
                     listings = listings.filter(cost__lte=max_price)
                 if categories:
-                    listings = listings.filter(category__in=categories)
+                    listings = listings.filter(category=categories)
 
             paginator = Paginator(listings, 10)
             page_number = req.GET.get('page', 1)

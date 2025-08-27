@@ -86,11 +86,12 @@ class ListingSearchForm(forms.Form):
             'placeholder': 'Up to'
         })
     )
-    category = forms.ModelMultipleChoiceField(
+    category = forms.ModelChoiceField(
         label="Product category",
         required=False,
         queryset=ProductCategory.objects.all(),
-        widget=forms.SelectMultiple(attrs={
+        empty_label="None",
+        widget=forms.Select(attrs={
             'class': 'search-categories-input'
         })
     )
