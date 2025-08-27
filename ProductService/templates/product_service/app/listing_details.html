@@ -1,0 +1,24 @@
+{% extends 'product_service/template.html' %}
+
+{% block title %} Listing Details {% endblock %}
+
+{% block container %}
+<div class="listing-details-container">
+    <div class="listing-details-header">
+        <div class="listing-details-images">
+            {% for image in images %}
+                <img src="{{image.image.url}}" alt="Product image" class="listing-details-image">
+            {% endfor %}
+        </div>
+        <div class="listing-details-info">
+            <h2 class="listing-details-product">{{listing.product_name}}</h2>
+            <p class="listing-details-category">{{listing.category}}</p>
+            <p class="listing-details-price">Price: {{listing.cost}}</p>
+            <p class="listing-details-stock">Stock Quantity: {{listing.stock}}</p>
+        </div>
+    </div>
+    <div class="listing-details-body">
+        <p class="listing-details-desc">{{listing.product_desc}}</p>
+    </div>
+</div>
+{% endblock %}
