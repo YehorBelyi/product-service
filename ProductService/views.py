@@ -199,9 +199,12 @@ class ListingDetailView(View):
     def get(self, req, **kwargs):
         pk = req.resolver_match.kwargs['pk']
         listing = get_object_or_404(Listing, pk=pk)
+
         images = listing.product_images.all()
+        main_image = images[0]
         context={
             'listing': listing,
-            'images': images
+            'main_image': main_image,
+            'additional_images': images
         }
         return render(req, self.template_name, context=context)
