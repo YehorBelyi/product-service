@@ -11,10 +11,10 @@
         <button type="submit">Search</button>
     </form>
     <div class="listing-list">
-        {% for listing in listings %}
-            <div class="listing-review">
+        {% for listing in page_obj %}
+            <a class="listing-review" href="{% url 'listing-details' listing.pk %}">
                 {% with main_image=listing.product_images.first %}
-                    {% if first_image %}
+                    {% if main_image %}
                         <img src="{{ main_image.image.url }}" alt="{{ listing.product_name }} image" class="listing-review-image">
                     {% else %}
                         <p>No image available</p>
@@ -23,7 +23,7 @@
                 <h2 class="listing-review-title">{{listing.product_name}}</h2>
                 <p class="listing-review-categories">{{listing.category}}</p>
                 <p class="listing-review-price">{{listing.cost}}</p>
-            </div>
+            </a>
         {% empty %}
             <p class="search-empty">No listings found.</p>
         {% endfor %}
