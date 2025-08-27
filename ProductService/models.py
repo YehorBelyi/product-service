@@ -8,7 +8,7 @@ from django.db.models import ForeignKey
 # Create your models here.
 class CustomUser(AbstractUser):
     phone_number = models.CharField(max_length=15, unique=True, null=True, blank=True)
-    photo = models.ImageField(upload_to="profile_photos/", null=True, blank=True)
+    photo = models.ImageField(upload_to="profile_photos/", null=True, blank=True, default="profile_photos/default-user-photo.png")
 
     def __str__(self):
         return self.username

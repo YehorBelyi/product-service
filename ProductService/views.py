@@ -11,6 +11,7 @@ from django.views.generic import View
 from ProductService.forms import LoginForm, RegisterForm, ListingSearchForm, ListingCreateForm, ProductImagesFormSet
 from ProductService.models import Listing
 
+
 # Create your views here.
 class HomePageView(View):
     template_name = 'product_service/app/home.html'
@@ -90,27 +91,28 @@ class ListingSearchView(View):
     template_name = 'product_service//app//listing_search.html'
 
     def get(self, req):
-            form = ListingSearchForm(req.GET or None)
-            listings = Listing.objects.all()
+        form = ListingSearchForm(req.GET or None)
+        listings = Listing.objects.all()
 
-            if form.is_valid():
-                form_data = form.cleaned_data
-                name = form_data.get('name')
-                max_price = form_data.get('max_price')
-                categories = form_data.get('category')
+        if form.is_valid():
+            form_data = form.cleaned_data
+            name = form_data.get('name')
+            max_price = form_data.get('max_price')
+            categories = form_data.get('category')
 
-                if name:
-                    listings = listings.filter(product_name__icontains=name)
-                if max_price:
-                    listings = listings.filter(cost__lte=max_price)
-                if categories:
-                    listings = listings.filter(category=categories)
+            if name:
+                listings = listings.filter(product_name__icontains=name)
+            if max_price:
+                listings = listings.filter(cost__lte=max_price)
+            if categories:
+                listings = listings.filter(category=categories)
 
-            paginator = Paginator(listings, 10)
-            page_number = req.GET.get('page', 1)
-            page_obj = paginator.get_page(page_number)
+        paginator = Paginator(listings, 10)
+        page_number = req.GET.get('page', 1)
+        page_obj = paginator.get_page(page_number)
 
-            return render(req, self.template_name, context={'form': form, 'listings': listings, 'page_obj': page_obj})
+        return render(req, self.template_name, context={'form': form, 'listings': listings, 'page_obj': page_obj})
+
 
 class ListingCreateView(LoginRequiredMixin, View):
     template_name = 'product_service/app/listing_create.html'
@@ -118,7 +120,7 @@ class ListingCreateView(LoginRequiredMixin, View):
     def get(self, req):
         listing_form = ListingCreateForm()
         images_form = ProductImagesFormSet()
-        context={
+        context = {
             'listing_form': listing_form,
             'images_form': images_form
         }
@@ -151,6 +153,7 @@ class ListingCreateView(LoginRequiredMixin, View):
         }
 
         return render(req, self.template_name, context)
+
 
 class ProfileView(View):
     template_name = 'product_service/account/profile.html'
@@ -203,10 +206,15 @@ class ListingDetailView(View):
         listing = get_object_or_404(Listing, pk=pk)
 
         images = listing.product_images.all()
-        main_image = images[0]
-        context={
+        if images:
+            main_image = images[0]
+        else:
+            main_image = None
+
+        context = {
             'listing': listing,
             'main_image': main_image,
             'additional_images': images
         }
+
         return render(req, self.template_name, context=context)

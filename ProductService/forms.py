@@ -72,7 +72,7 @@ class ListingSearchForm(forms.Form):
         label = "Product name",
         required=False,
         widget=forms.TextInput(attrs={
-            'class': 'search-name-input',
+            'class': 'form-control',
             'placeholder': 'Product name',
             'autocomplete': 'off'
         })
@@ -82,7 +82,7 @@ class ListingSearchForm(forms.Form):
         required=False,
         min_value=0,
         widget=forms.NumberInput(attrs={
-            'class': 'search-price-input',
+            'class': 'form-control',
             'placeholder': 'Up to'
         })
     )
@@ -92,7 +92,7 @@ class ListingSearchForm(forms.Form):
         queryset=ProductCategory.objects.all(),
         empty_label="None",
         widget=forms.Select(attrs={
-            'class': 'search-categories-input'
+            'class': 'dropdown form-select'
         })
     )
 
