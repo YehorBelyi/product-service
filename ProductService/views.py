@@ -1,7 +1,7 @@
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy, reverse
 from django.contrib import messages
 from django.views.generic import View
@@ -191,3 +191,17 @@ class ProfileView(View):
 
         messages.success(request, "Profile updated successfully!")
         return redirect("profile")
+
+
+class ListingDetailView(View):
+    template_name = 'product_service/app/listing_details.html'
+
+    def get(self, req, **kwargs):
+        pk = req.resolver_match.kwargs['pk']
+        listing = get_object_or_404(Listing, pk=pk)
+        images = listing.product_images.all()
+        context={
+            'listing': listing,
+            'images': images
+        }
+        return render(req, self.template_name, context=context)
