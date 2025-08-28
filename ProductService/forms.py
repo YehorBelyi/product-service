@@ -1,5 +1,7 @@
 from django import forms
 from django.contrib.auth.models import User
+from django.shortcuts import resolve_url
+
 from ProductService.models import CustomUser
 from ProductService.models import CustomUser, ProductCategory, Listing, ProductImages
 from django.core.validators import RegexValidator
@@ -27,6 +29,7 @@ class LoginForm(forms.Form):
         widget=forms.PasswordInput(attrs={'class': 'form-control'}),
         # min_length=8
     )
+
 
 class RegisterForm(forms.ModelForm):
     username = forms.CharField(
@@ -56,6 +59,7 @@ class RegisterForm(forms.ModelForm):
         widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': '+380123456789'}),
         validators=[phone_validator],
     )
+
     class Meta:
         model = CustomUser
         fields = ('username', 'email', 'phone', 'password1', 'password2')
@@ -69,7 +73,7 @@ class RegisterForm(forms.ModelForm):
 
 class ListingSearchForm(forms.Form):
     name = forms.CharField(
-        label = "Product name",
+        label="Product name",
         required=False,
         widget=forms.TextInput(attrs={
             'class': 'form-control',
@@ -78,7 +82,7 @@ class ListingSearchForm(forms.Form):
         })
     )
     max_price = forms.DecimalField(
-        label = "Maximum product price",
+        label="Maximum product price",
         required=False,
         min_value=0,
         widget=forms.NumberInput(attrs={
@@ -96,20 +100,22 @@ class ListingSearchForm(forms.Form):
         })
     )
 
+
 class ListingCreateForm(forms.ModelForm):
     product_name = forms.CharField(
         label='Product name',
         max_length=100,
         widget=forms.TextInput(attrs={
-            'class': 'listing-create-name',
+            'class': 'form-control create-input',
             'placeholder': 'Enter product name'
-        })
+        }),
+        required=True
     )
     product_desc = forms.CharField(
         label='Product description',
-        required=False,
+        required=True,
         widget=forms.Textarea(attrs={
-            'class': 'listing-create-desc',
+            'class': 'form-control',
             'placeholder': 'Enter product description'
         })
     )
@@ -117,24 +123,26 @@ class ListingCreateForm(forms.ModelForm):
         label='Product Category',
         queryset=ProductCategory.objects.all(),
         widget=forms.Select(attrs={
-            'class': 'listing-create-categories'
+            'class': 'dropdown form-select create-input'
         })
     )
     cost = forms.DecimalField(
         label='Product price',
         min_value=0,
         widget=forms.NumberInput(attrs={
-            'class': 'listing-create-price',
+            'class': 'form-control create-input',
             'placeholder': 'Price'
-        })
+        }),
+        required=True
     )
     stock = forms.IntegerField(
         label='Product stock quantity',
         min_value=0,
         widget=forms.NumberInput(attrs={
-            'class': 'listing-create-stock',
+            'class': 'form-control create-input',
             'placeholder': 'Stock quantity'
-        })
+        }),
+        required=True
     )
 
     class Meta:
@@ -156,16 +164,17 @@ class ProductImageForm(forms.ModelForm):
                 raise forms.ValidationError("File must be an image.")
         return image
 
+
 ProductImagesFormSet = forms.inlineformset_factory(
     Listing,
     ProductImages,
     fields=['image'],
     extra=3,
-    can_delete=True,
+    can_delete=False,
     widgets={
         'image': forms.FileInput(attrs={
-            'class': 'listing-create-image',
+            'class': 'form-control',
             'accept': 'image/*'
         })
-    }
+    },
 )
