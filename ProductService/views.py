@@ -167,7 +167,7 @@ class ProfileView(View):
     def get(self, request):
         user = request.user
         user_orders = Order.objects.filter(user=user).order_by('-created_at')
-        paginator = Paginator(user_orders, 5)
+        paginator = Paginator(user_orders, 4)
         page_number = request.GET.get('page', 1)
         page_obj = paginator.get_page(page_number)
 

@@ -1,0 +1,11 @@
+<div class="container shadow rounded d-flex flex-column align-items-center order-info justify-content-center">
+	<div class="order-name">
+		<h2>{{ listing.product_name }}</h2>
+	</div>
+	<div class="order-image mb-3">
+		<img src="{{ main_image.image.url }}" alt="">
+	</div>
+	<div class="order-cost">
+		<h3>{{ listing.cost|floatformat:2 }}$</h3>
+	</div>
+</div>

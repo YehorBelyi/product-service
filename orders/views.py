@@ -7,7 +7,7 @@ from django.views.generic.edit import CreateView
 from django.conf import settings
 from django.views.decorators.csrf import csrf_exempt
 
-from ProductService.models import Listing
+from ProductService.models import Listing, ProductImages
 from .forms import OrderForm
 
 from .models import Order
@@ -75,7 +75,8 @@ class OrderSuccessView(View):
     template_name = 'orders/order_success.html'
 
     def get(self, request):
-        return render(request, self.template_name)
+        order_id = request.GET.get("order_id")
+        return render(request, self.template_name, {"order_id": order_id})
 
 
 class OrderCancelView(View):
@@ -108,6 +109,7 @@ class OrderCreateView(CreateView):
         context = super().get_context_data(**kwargs)
         product_id = self.kwargs['product_id']
         product = get_object_or_404(Listing, pk=product_id)
-        # main_image = product.p
+        images = product.product_images.all()
         context['listing'] = product
+        context['main_image'] = images[0]
         return context
