@@ -2,7 +2,7 @@
 
 {% block title %} Listing Delete | Go&Buy {% endblock %}
 
-{% block modal-delete %}
+{% block modal-window %}
     <form method="post" action="{% url 'listing-delete' listing.pk %}">
         {% csrf_token %}
         <h2>Are you sure?</h2>

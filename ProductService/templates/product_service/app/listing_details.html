@@ -72,12 +72,12 @@
 			</div>
 			{% if request.user == listing.user %}
 			<div class="listing-details-update-delete">
-				<a href="" class="listing-details-update">Edit Listing</a>
+				<a href="{% url 'listing-update' listing.pk %}" class="listing-details-update">Edit Listing</a>
 				<a href="{% url 'listing-delete' listing.pk %}" class="listing-details-delete">Delete Listing</a>
 			</div>
 			{% endif %}
-			<div class="modal-delete">
-				{% block modal-delete %}
+			<div class="modal-window">
+				{% block modal-window %}
 				{% endblock %}
 			</div>
 		</div>

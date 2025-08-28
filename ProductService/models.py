@@ -36,4 +36,7 @@ def get_image_upload_path(instance, filename):
 
 class ProductImages(models.Model):
     listing = ForeignKey(Listing, on_delete=models.CASCADE, related_name='product_images')
-    image = models.ImageField(upload_to=get_image_upload_path)
+    image = models.ImageField(upload_to=get_image_upload_path, blank=True, null=True)
+
+    def __str__(self):
+        return f"Image for {self.listing}"
