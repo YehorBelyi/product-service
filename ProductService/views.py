@@ -5,6 +5,8 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy, reverse
 from django.contrib import messages
 from django.views.generic import View
+from pip._internal import req
+
 from ProductService.forms import LoginForm, RegisterForm
 from django.core.paginator import Paginator
 from django.views.generic import View
@@ -12,6 +14,8 @@ from ProductService.forms import (LoginForm, RegisterForm, ListingSearchForm, Li
                                     ProductImagesCreateFormSet, ListingUpdateForm, ProductImagesUpdateFormSet)
 from ProductService.models import Listing
 from django.core.exceptions import PermissionDenied
+
+from orders.models import Order
 
 
 # Create your views here.
@@ -162,7 +166,16 @@ class ProfileView(View):
 
     def get(self, request):
         user = request.user
-        return render(request, self.template_name, {'user': user})
+        user_orders = Order.objects.filter(user=user).order_by('-created_at')
+        paginator = Paginator(user_orders, 5)
+        page_number = request.GET.get('page', 1)
+        page_obj = paginator.get_page(page_number)
+
+        context = {
+            'user': user,
+            'user_orders': page_obj
+        }
+        return render(request, self.template_name, context=context)
 
     def post(self, request):
         user = request.user

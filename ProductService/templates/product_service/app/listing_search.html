@@ -2,7 +2,7 @@
 
 {% load static %}
 
-{% block title %} Home Page {% endblock %}
+{% block title %} Search {% endblock %}
 
 {% block container %}
 	<form method="get" class="container shadow rounded mt-3 d-flex flex-column align-items-center">
@@ -54,7 +54,9 @@
 			</div>
 		</a>
 	{% empty %}
-		<p class="search-empty">No listings found.</p>
+		<div class="alert alert-danger mt-3 text-center" role="alert">
+			No products found!
+ 		</div>
 	{% endfor %}
 
 
