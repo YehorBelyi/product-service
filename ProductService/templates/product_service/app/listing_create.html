@@ -1,28 +1,38 @@
 {% extends 'product_service/template.html' %}
 
-{% block title %} Create Listing | Go&Buy {% endblock %}
+{% block title %} Create Listing {% endblock %}
 
 {% block container %}
-    <div class="listing-create-container">
-        <h2>Listing create form</h2>
-        {% for message in messages %}
-            <p class="listing-create-message {{message.tags}}">{{message}}</p>
-        {% endfor %}
-        <form method="post" enctype="multipart/form-data">
-            {% csrf_token %}
-            <h3>Upload Images</h3>
-            {{ images_form.management_form }}
-            {% for form in images_form %}
-                <div class="listing-image-form">
-                    {{form.as_p}}
-                    {% if form.instance.pk %}
-                        <input type="checkbox" name="{{ form.prefix }}-DELETE" id="{{ form.prefix }}-DELETE">
-                        <label for="{{ form.prefix }}-DELETE">Delete this image</label>
-                    {% endif %}
-                </div>
-            {% endfor %}
-            {{listing_form.as_p}}
-            <button type="submit" class="listing-create-button">Create Listing</button>
-        </form>
-    </div>
+	{% if messages %}
+		{% for message in messages %}
+			<div class="alert
+              {% if message.tags == 'error' %}alert-danger
+              {% elif message.tags == 'success' %}alert-success
+              {% elif message.tags == 'warning' %}alert-warning
+              {% elif message.tags == 'info' %}alert-info
+              {% else %}alert-primary
+              {% endif %} my-3 text-center" role="alert">
+				{{ message }}
+			</div>
+		{% endfor %}
+	{% endif %}
+
+	<h2 class="my-3">Create new listing</h2>
+
+	<form method="post" enctype="multipart/form-data" class="container shadow rounded create-form mb-3 d-flex flex-column align-items-center">
+		{% csrf_token %}
+		<div class="container d-flex image-container gap-3 p-3 justify-content-center">
+			{{ images_form.management_form }}
+			{% for form in images_form %}
+				<div class="card text-center p-2 align-self-center">
+					{{ form.as_p }}
+					{{ form.button }}
+				</div>
+			{% endfor %}
+		</div>
+		<div class="align-self-start" style="width: 100%;">
+			{{ listing_form.as_p }}
+		</div>
+		<button type="submit" class="btn btn-success my-3">Create Listing</button>
+	</form>
 {% endblock %}
