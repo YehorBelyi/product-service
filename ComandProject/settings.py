@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'ProductService.apps.ProductserviceConfig',
+    'orders'
 ]
 
 AUTH_USER_MODEL = "ProductService.CustomUser"
