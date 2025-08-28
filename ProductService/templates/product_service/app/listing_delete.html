@@ -1,10 +1,12 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
-</head>
-<body>
-$END$
-</body>
-</html>
+{% extends 'product_service/app/listing_details.html' %}
+
+{% block title %} Listing Delete | Go&Buy {% endblock %}
+
+{% block modal-delete %}
+    <form method="post" action="{% url 'listing-delete' listing.pk %}">
+        {% csrf_token %}
+        <h2>Are you sure?</h2>
+        <a href="{% url 'listing-details' listing.pk %}">Cancel</a>
+        <button type="submit">Delete</button>
+    </form>
+{% endblock %}

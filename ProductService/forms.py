@@ -128,18 +128,10 @@ class ListingCreateForm(forms.ModelForm):
             'placeholder': 'Price'
         })
     )
-    stock = forms.IntegerField(
-        label='Product stock quantity',
-        min_value=0,
-        widget=forms.NumberInput(attrs={
-            'class': 'listing-create-stock',
-            'placeholder': 'Stock quantity'
-        })
-    )
 
     class Meta:
         model = Listing
-        fields = ['product_name', 'product_desc', 'category', 'cost', 'stock']
+        fields = ['product_name', 'product_desc', 'category', 'cost']
 
 
 class ProductImageForm(forms.ModelForm):

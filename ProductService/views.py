@@ -10,6 +10,7 @@ from django.core.paginator import Paginator
 from django.views.generic import View
 from ProductService.forms import LoginForm, RegisterForm, ListingSearchForm, ListingCreateForm, ProductImagesFormSet
 from ProductService.models import Listing
+from django.core.exceptions import PermissionDenied
 
 
 # Create your views here.
@@ -201,8 +202,7 @@ class ProfileView(View):
 class ListingDetailView(View):
     template_name = 'product_service/app/listing_details.html'
 
-    def get(self, req, **kwargs):
-        pk = req.resolver_match.kwargs['pk']
+    def get(self, req, pk):
         listing = get_object_or_404(Listing, pk=pk)
 
         images = listing.product_images.all()
@@ -218,3 +218,38 @@ class ListingDetailView(View):
         }
 
         return render(req, self.template_name, context=context)
+
+
+class ListingDeleteView(LoginRequiredMixin, View):
+    template_name = 'product_service/app/listing_delete.html'
+    success_url = reverse_lazy('listing-search')
+
+    def get(self, req, pk):
+        listing = get_object_or_404(Listing, pk=pk)
+
+        if req.user != listing.user:
+            raise PermissionDenied
+
+        images = listing.product_images.all()
+        if images:
+            main_image = images[0]
+        else:
+            main_image = None
+
+        context = {
+            'listing': listing,
+            'main_image': main_image,
+            'additional_images': images
+        }
+
+        return render(req, self.template_name, context)
+
+
+    def post(self, req, pk):
+        listing = get_object_or_404(Listing, pk=pk)
+
+        if req.user != listing.user:
+            raise PermissionDenied
+
+        listing.delete()
+        return redirect(self.success_url)

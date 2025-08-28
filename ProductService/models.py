@@ -26,7 +26,6 @@ class Listing(models.Model):
     product_desc = models.TextField(default="", blank=True)
     category = models.ForeignKey(ProductCategory, on_delete=models.CASCADE, related_name='listings')
     cost = models.DecimalField(max_digits=10, decimal_places=2, validators=[MinValueValidator(0)])
-    stock = models.PositiveIntegerField(default=0)
 
     def __str__(self):
         return f"Listing of {self.product_name} by {self.user} in {self.category} category"
