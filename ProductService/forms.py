@@ -165,9 +165,10 @@ ProductImagesCreateFormSet = forms.inlineformset_factory(
     extra=3,
     min_num=0,
     validate_min=False,
+    can_delete=False,
     widgets={
         'image': forms.FileInput(attrs={
-            'class': 'listing-create-image',
+            'class': 'form-control',
             'accept': 'image/*'
         })
     }
