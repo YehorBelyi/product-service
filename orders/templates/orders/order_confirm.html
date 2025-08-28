@@ -1,8 +1,82 @@
 {% extends 'product_service/template.html' %}
 
+{% load static %}
+
 {% block container %}
-	<form action="{% url 'create-checkout-session' order_id=order.id %}" method="POST">
-		{% csrf_token %}
-		<button type="submit">Оплатити через Stripe</button>
-	</form>
+	<div class="container my-4">
+		<h1>Ordered Product</h1>
+		<div
+			class="container d-flex shadow rounded my-3 align-items-center justify-content-between">
+			<div class="product-order-review d-flex align-items-center justify-content-center">
+				<div class="product-order-image">
+					{% with main_image=order.product.product_images.first %}
+						{% if main_image %}
+							<img src="{{ main_image.image.url }}" alt="{{ order.product.product_name }} image"
+								 class="rounded">
+						{% else %}
+							<img src="{% static 'product_service/images/no_image.png' %}"
+								 alt="{{ order.product.product_name }} image"
+								 class="rounded">
+						{% endif %}
+					{% endwith %}
+				</div>
+				<div class="listing-review-info mx-3 d-flex flex-column justify-content-center">
+					<h2>{{ order.product.product_name }}</h2>
+				</div>
+			</div>
+			<div class="listing-review-price text-center">
+				<h3>{{ order.product.cost|floatformat:2 }}$</h3>
+			</div>
+		</div>
+		<h1>Order Info</h1>
+		<form class="container shadow rounded p-3 product-order-form">
+			<div class="d-flex align-items-center justify-content-around my-3">
+				<div>
+					<label for="">Firstname</label>
+					<input type="text" value="{{ order.first_name }}" class="form-control" readonly disabled>
+				</div>
+				<div>
+					<label for="">Lastname</label>
+					<input type="text" value="{{ order.last_name }}" class="form-control" readonly disabled>
+				</div>
+				<div>
+					<label for="">Email</label>
+					<input type="text" value="{{ order.email }}" class="form-control" readonly disabled>
+				</div>
+			</div>
+			<div class="d-flex align-items-center justify-content-around my-3">
+				<div>
+					<label for="">Address 1</label>
+					<input type="text" value="{{ order.address1 }}" class="form-control" readonly disabled>
+				</div>
+				<div>
+					<label for="">Address 2</label>
+					<input type="text" value="{{ order.address2 }}" class="form-control" readonly disabled>
+				</div>
+				<div>
+					<label for="">City</label>
+					<input type="text" value="{{ order.city }}" class="form-control" readonly disabled>
+				</div>
+			</div>
+			<div class="d-flex align-items-center justify-content-around my-3">
+				<div>
+					<label for="">Country</label>
+					<input type="text" value="{{ order.address1 }}" class="form-control" readonly disabled>
+				</div>
+				<div>
+					<label for="">Postal Code</label>
+					<input type="text" value="{{ order.address2 }}" class="form-control" readonly disabled>
+				</div>
+				<div>
+					<label for="">Phone</label>
+					<input type="text" value="{{ order.city }}" class="form-control" readonly disabled>
+				</div>
+			</div>
+		</form>
+
+		<form action="{% url 'create-checkout-session' order_id=order.id %}" method="POST" class="text-center my-3">
+			{% csrf_token %}
+			<button type="submit" class="btn btn-success btn-lg text-center">Confirm payment</button>
+		</form>
+	</div>
 {% endblock %}

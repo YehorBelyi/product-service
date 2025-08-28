@@ -234,3 +234,61 @@ nav .container-fluid {
 .create-input {
     width: 400px !important;
 }
+
+.order-container, .order-container:hover {
+    transition: none !important;
+    opacity: 1;
+}
+
+.order-image {
+    width: 200px;
+    height: 200px;
+    object-fit: contain;
+}
+
+.order-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.order-name {
+    overflow-wrap: anywhere;
+}
+
+.order-info {
+    height: 350px !important;
+    width: 40% !important;
+}
+
+.order-form input {
+    width: 500px;
+}
+
+.product-order-image {
+    width: 80px;
+    height: 80px;
+    object-fit: contain;
+}
+
+.product-order-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.product-order-review {
+    height: 100px !important;
+}
+
+.product-list-container {
+    height: 470px !important;
+}
+
+.confirm-info {
+    height: 400px !important;
+}
+
+.product-order-form div input {
+    width: 300px;
+}
