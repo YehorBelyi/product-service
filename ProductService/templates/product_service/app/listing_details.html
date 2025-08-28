@@ -1,24 +1,85 @@
 {% extends 'product_service/template.html' %}
 
-{% block title %} Listing Details {% endblock %}
+{% load static %}
+
+{% block title %} {{ listing.product_name }} {% endblock %}
 
 {% block container %}
-<div class="listing-details-container">
-    <div class="listing-details-header">
-        <div class="listing-details-images">
-            {% for image in images %}
-                <img src="{{image.image.url}}" alt="Product image" class="listing-details-image">
-            {% endfor %}
-        </div>
-        <div class="listing-details-info">
-            <h2 class="listing-details-product">{{listing.product_name}}</h2>
-            <p class="listing-details-category">{{listing.category}}</p>
-            <p class="listing-details-price">Price: {{listing.cost}}</p>
-            <p class="listing-details-stock">Stock Quantity: {{listing.stock}}</p>
-        </div>
-    </div>
-    <div class="listing-details-body">
-        <p class="listing-details-desc">{{listing.product_desc}}</p>
-    </div>
-</div>
+	<div class="product-name mt-3 p-2">
+		<h2>{{ listing.product_name }}</h2>
+	</div>
+
+	<div class="container d-flex gap-3 mb-5">
+		<div class="container shadow rounded product-details w-75 d-flex align-items-center flex-column">
+			<div class="listing-details-header">
+				{% if main_image %}
+					<div class="listing-details-images mt-4">
+						<div class="main-image">
+							<img src="{{ main_image.image.url }}" alt="Product image" class="listing-details-image">
+						</div>
+						<div class="additional-images">
+							{% for image in additional_images %}
+								<div class="add-image shadow">
+									<img src="{{ image.image.url }}" alt="Product image" class="shadow"
+										 onclick="changeProductPhoto(this.src)">
+								</div>
+							{% endfor %}
+						</div>
+					</div>
+				{% else %}
+					<div class="main-image">
+							<img src="{% static 'product_service/images/no_image.png' %}" alt="Product image" class="listing-details-image">
+						</div>
+				{% endif %}
+
+
+			</div>
+			<hr>
+			<div class="listing-details-body align-self-start">
+				<div class="listing-details-info">
+					<h2>Description</h2>
+				</div>
+				<p class="listing-details-desc">{{ listing.product_desc }}</p>
+			</div>
+		</div>
+		<div class="container shadow rounded product-order w-25 p-3 d-flex flex-column align-items-center">
+			<div class="product-order-info align-self-start">
+				<p>
+					<span class="badge text-bg-primary">Category:</span> {{ listing.category }}
+				</p>
+				<p>
+					<span class="badge text-bg-primary">Posted by:</span>
+					<img src="{{ listing.user.photo.url }}" alt="" class="rounded-circle listing-details-user">
+					{{ listing.user.username }}
+				</p>
+			</div>
+			<div class="order-controls">
+				<h1 class="text-center">
+					{{ listing.cost|floatformat:1 }}$
+				</h1>
+				<a href="" class="btn order-button text-light">Buy Now</a>
+			</div>
+			<div class="shipping-methods align-self-start">
+				<p>Shipping methods</p>
+				<div class="shipping-method d-flex">
+					<img src="{% static 'product_service/images/Amazon_icon.png' %}" alt="">
+					<p>Amazon</p>
+				</div>
+				<div class="shipping-method d-flex">
+					<img src="{% static 'product_service/images/nova_poshta.webp' %}" alt="">
+					<p>Nova Poshta</p>
+				</div>
+			</div>
+			{% if request.user == listing.user %}
+			<div class="listing-details-update-delete">
+				<a href="{% url 'listing-update' listing.pk %}" class="listing-details-update">Edit Listing</a>
+				<a href="{% url 'listing-delete' listing.pk %}" class="listing-details-delete">Delete Listing</a>
+			</div>
+			{% endif %}
+			<div class="modal-window">
+				{% block modal-window %}
+				{% endblock %}
+			</div>
+		</div>
+	</div>
 {% endblock %}

@@ -22,13 +22,8 @@
 		<div class="d-flex justify-content-between align-items-center">
 			<div class="d-flex align-items-center">
 				<div class="user-photo me-3">
-					{% if user.photo %}
-						<img src="{{ user.photo.url }}" alt="User Photo"
-							 class="rounded-circle" width="150" height="150">
-					{% else %}
-						<img src="{% static 'product_service/images/default-user-photo.png' %}" alt="User Photo"
-							 class="rounded-circle" width="150" height="150">
-					{% endif %}
+					<img src="{{ user.photo.url }}" alt="User Photo"
+						 class="rounded-circle" width="150" height="150">
 				</div>
 				<div>
 					<h2>{{ user.username }}</h2>
@@ -69,7 +64,8 @@
 					</div>
 					<div class="mb-3">
 						<label for="id_phone" class="form-label">Phone</label>
-						<input type="text" name="phone" id="id_phone" class="form-control" value="{{ user.phone_number }}">
+						<input type="text" name="phone" id="id_phone" class="form-control"
+							   value="{{ user.phone_number }}">
 					</div>
 					<div class="mb-3">
 						<label for="id_photo" class="form-label">Profile Photo</label>
