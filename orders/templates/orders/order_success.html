@@ -1,0 +1,8 @@
+{% extends 'product_service/template.html' %}
+
+{% block container %}
+	<div class="container d-flex flex-column align-items-center">
+		<div class="alert alert-success text-center my-3">Payment was successful!</div>
+		<a href="{% url 'home' %}" class="btn btn-primary">Back to Home</a>
+	</div>
+{% endblock %}

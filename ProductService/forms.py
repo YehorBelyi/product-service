@@ -102,7 +102,7 @@ class ListingCreateForm(forms.ModelForm):
         label='Product name',
         max_length=100,
         widget=forms.TextInput(attrs={
-            'class': 'listing-create-name',
+            'class': 'form-control create-input',
             'placeholder': 'Enter product name'
         })
     )
@@ -110,7 +110,7 @@ class ListingCreateForm(forms.ModelForm):
         label='Product description',
         required=False,
         widget=forms.Textarea(attrs={
-            'class': 'listing-create-desc',
+            'class': 'form-control',
             'placeholder': 'Enter product description'
         })
     )
@@ -118,14 +118,14 @@ class ListingCreateForm(forms.ModelForm):
         label='Product Category',
         queryset=ProductCategory.objects.all(),
         widget=forms.Select(attrs={
-            'class': 'listing-create-categories'
+            'class': 'dropdown form-select create-input'
         })
     )
     cost = forms.DecimalField(
         label='Product price',
         min_value=0,
         widget=forms.NumberInput(attrs={
-            'class': 'listing-create-price',
+            'class': 'form-control create-input',
             'placeholder': 'Price'
         })
     )
@@ -165,9 +165,10 @@ ProductImagesCreateFormSet = forms.inlineformset_factory(
     extra=3,
     min_num=0,
     validate_min=False,
+    can_delete=False,
     widgets={
         'image': forms.FileInput(attrs={
-            'class': 'listing-create-image',
+            'class': 'form-control',
             'accept': 'image/*'
         })
     }

@@ -221,3 +221,16 @@ nav .container-fluid {
     text-decoration: none;
     color: black;
 }
+
+.image-container {
+    text-align: center !important;
+}
+
+.image-container .card {
+    overflow-wrap: anywhere;
+    overflow: hidden !important;
+}
+
+.create-input {
+    width: 400px !important;
+}
