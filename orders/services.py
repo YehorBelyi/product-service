@@ -18,7 +18,7 @@ def create_checkout_session(order):
             'quantity': 1,
         }],
         mode="payment",
-        success_url=settings.DOMAIN + reverse('order_success'),
+        success_url=settings.DOMAIN + reverse('order_success') + f"?order_id={order.id}",
         cancel_url=settings.DOMAIN + reverse('order_cancel'),
         client_reference_id=str(order.id),
     )

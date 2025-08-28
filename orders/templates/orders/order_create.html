@@ -2,19 +2,16 @@
 
 {% load crispy_forms_tags %}
 
-{% block title %} {{ order.product.product_name }} {% endblock %}
+{% block title %} {{ listing.product_name }} payment {% endblock %}
 
 {% block container %}
 	<h1 class="my-2 p-2">Create payment</h1>
-	<div class="container d-flex">
-		<form method="post" action="" class="container shadow rounded">
+	<div class="container d-flex gap-4">
+		<form method="post" action="" class="container shadow rounded order-form w-50 d-flex flex-column align-items-center p-3 mb-3">
 			{% csrf_token %}
 			{{ form|crispy }}
 			<button type="submit" class="btn btn-primary mt-3">Confirm payment</button>
 		</form>
-		<div class="container">
-			{{ listing.product_name }}
-			{{ listing.product_images.image }}
-		</div>
+		{% include 'orders/product_details.html' %}
 	</div>
 {% endblock %}
