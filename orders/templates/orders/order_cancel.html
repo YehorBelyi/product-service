@@ -1,0 +1,8 @@
+{% extends 'product_service/template.html' %}
+
+{% block container %}
+	<div class="alert alert-danger mt-3 text-center">
+		Error! Your payment was canceled!
+	Details: {{ error }}
+	</div>
+{% endblock %}

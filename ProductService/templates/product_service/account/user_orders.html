@@ -1,0 +1,51 @@
+<div class="container mt-4">
+	<div class="row">
+		<div class="col-md-4">
+			<form method="post" enctype="multipart/form-data">
+				{% csrf_token %}
+			</form>
+		</div>
+
+		<div class="col-md-8">
+			{% if user_orders %}
+				<ul class="list-group">
+					{% for order in user_orders %}
+						<li class="list-group-item">
+							<p><strong>Order #{{ order.id }}</strong></p>
+							<p>Product: {{ order.product.product_name }}</p>
+							<p>Status: {{ order.get_status_display }}</p>
+							<p>Date: {{ order.created_at }}</p>
+						</li>
+					{% endfor %}
+				</ul>
+
+				<nav aria-label="Page navigation">
+					<ul class="pagination justify-content-center mt-3">
+						{% if user_orders.has_previous %}
+							<li class="page-item">
+								<a class="page-link" href="?page=1">&laquo; first</a>
+							</li>
+							<li class="page-item">
+								<a class="page-link" href="?page={{ user_orders.previous_page_number }}">previous</a>
+							</li>
+						{% endif %}
+
+						<li class="page-item active"><a class="page-link" href="#">Page {{ user_orders.number }}
+							of {{ user_orders.paginator.num_pages }}</a></li>
+
+						{% if user_orders.has_next %}
+							<li class="page-item">
+								<a class="page-link" href="?page={{ user_orders.next_page_number }}">next</a>
+							</li>
+							<li class="page-item">
+								<a class="page-link" href="?page={{ user_orders.paginator.num_pages }}">last &raquo;</a>
+							</li>
+						{% endif %}
+					</ul>
+				</nav>
+			{% else %}
+				<p>You have not placed any orders yet.</p>
+			{% endif %}
+		</div>
+	</div>
+</div>
