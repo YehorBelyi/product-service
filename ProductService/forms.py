@@ -135,15 +135,6 @@ class ListingCreateForm(forms.ModelForm):
         }),
         required=True
     )
-    stock = forms.IntegerField(
-        label='Product stock quantity',
-        min_value=0,
-        widget=forms.NumberInput(attrs={
-            'class': 'form-control create-input',
-            'placeholder': 'Stock quantity'
-        }),
-        required=True
-    )
 
     class Meta:
         model = Listing
