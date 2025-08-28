@@ -1,0 +1,35 @@
+{% extends 'product_service/app/listing_details.html' %}
+
+{% block title %} Listing Update | Go&Buy {% endblock %}
+
+{% block modal-window %}
+    <form method="post" action="{% url 'listing-update' listing.pk %}" enctype="multipart/form-data">
+        {% csrf_token %}
+        {% for field in listing_form %}
+            <div class="listing-field">
+                <p class="{{field.name}}-label-tag">{{field.label_tag}}</p>
+                <div class="{{field.name}}-widget">{{field.as_widget}}</div>
+            </div>
+        {% endfor %}
+        <div class="images-form-box">
+            {{ images_form.management_form }}
+            {% for form in images_form %}
+                <div class="image-box">
+                    {{ form.id }}
+                    {% if form.instance.pk %}
+                        <img src="{{ form.instance.image.url }}" alt="Image">
+                        <p>Replace with new image:</p>
+                    {% else %}
+                        <p>Add new image:</p>
+                    {% endif %}
+                    <div class="{{form.fields.image.name}}-widget">{{ form.image }}</div>
+                    {% if form.errors %}
+                        <span class="error">{{ form.errors }}</span>
+                    {% endif %}
+                </div>
+            {% endfor %}
+        </div>
+        <a href="{% url 'listing-details' listing.pk %}">Cancel</a>
+        <button type="submit">Save</button>
+    </form>
+{% endblock %}

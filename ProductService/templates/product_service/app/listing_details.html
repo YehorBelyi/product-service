@@ -48,9 +48,6 @@
 					<span class="badge text-bg-primary">Category:</span> {{ listing.category }}
 				</p>
 				<p>
-					<span class="badge text-bg-primary">Stock Quantity:</span> {{ listing.stock }} items
-				</p>
-				<p>
 					<span class="badge text-bg-primary">Posted by:</span>
 					<img src="{{ listing.user.photo.url }}" alt="" class="rounded-circle listing-details-user">
 					{{ listing.user.username }}
@@ -72,6 +69,16 @@
 					<img src="{% static 'product_service/images/nova_poshta.webp' %}" alt="">
 					<p>Nova Poshta</p>
 				</div>
+			</div>
+			{% if request.user == listing.user %}
+			<div class="listing-details-update-delete">
+				<a href="{% url 'listing-update' listing.pk %}" class="listing-details-update">Edit Listing</a>
+				<a href="{% url 'listing-delete' listing.pk %}" class="listing-details-delete">Delete Listing</a>
+			</div>
+			{% endif %}
+			<div class="modal-window">
+				{% block modal-window %}
+				{% endblock %}
 			</div>
 		</div>
 	</div>
