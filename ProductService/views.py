@@ -98,7 +98,7 @@ class ListingSearchView(View):
 
     def get(self, req):
         form = ListingSearchForm(req.GET or None)
-        listings = Listing.objects.all()
+        listings = Listing.objects.filter(is_hidden=False)
 
         if form.is_valid():
             form_data = form.cleaned_data
