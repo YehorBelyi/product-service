@@ -96,6 +96,14 @@ class ListingSearchForm(forms.Form):
             'class': 'dropdown form-select'
         })
     )
+    price_order_by = forms.ChoiceField(
+        label="Price ordering",
+        required=False,
+        choices=[('-cost', 'High to Low'),('cost', 'Low to High')],
+        widget=forms.Select(attrs={
+            'class': 'dropdown form-select'
+        })
+    )
 
 class ListingCreateForm(forms.ModelForm):
     product_name = forms.CharField(
