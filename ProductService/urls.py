@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.urls import path
 from ProductService import views
-from ProductService.views import ListingUpdateView
+from ProductService.views import ListingUpdateView, UserListingView
 
 urlpatterns = [
     path('listing/search', views.ListingSearchView.as_view(), name='listing-search'),
@@ -9,4 +9,5 @@ urlpatterns = [
     path('listing/<int:pk>/details', views.ListingDetailView.as_view(), name='listing-details'),
     path('listing/<int:pk>/delete', views.ListingDeleteView.as_view(), name='listing-delete'),
     path('listing/<int:pk>/update', ListingUpdateView.as_view(), name='listing-update'),
+    path('listing/user-listings', views.UserListingView.as_view(), name='user-listings'),
 ]
