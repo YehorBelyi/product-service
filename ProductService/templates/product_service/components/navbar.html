@@ -10,7 +10,10 @@
 						</button>
 						<ul class="dropdown-menu">
 							<li><a class="dropdown-item" href="{% url 'listing-search' %}">Search</a></li>
-							<li><a class="dropdown-item" href="{% url 'listing-create' %}">Create</a></li>
+							{% if user.is_authenticated %}
+								<li><a class="dropdown-item" href="{% url 'listing-create' %}">Create</a></li>
+								<li><a class="dropdown-item" href="{% url 'user-listings' %}">My listings</a></li>
+							{% endif %}
 						</ul>
 					</li>
 				</ul>
