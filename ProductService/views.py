@@ -324,3 +324,14 @@ class ListingUpdateView(LoginRequiredMixin, View):
     def get_success_url(self):
         return reverse_lazy('listing-details', kwargs={'pk': self.kwargs['pk']})
 
+
+class UserListingView(LoginRequiredMixin, View):
+    template_name = 'product_service/app/user_listings.html'
+
+    def get(self, req):
+        user_listings = Listing.objects.filter(user=req.user)
+        paginator = Paginator(user_listings, 10)
+        page_number = req.GET.get('page', 1)
+        page_obj = paginator.get_page(page_number)
+
+        return render(req, self.template_name, context={'listings': user_listings, 'page_obj': page_obj})
