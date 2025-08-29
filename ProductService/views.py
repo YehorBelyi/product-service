@@ -105,6 +105,7 @@ class ListingSearchView(View):
             name = form_data.get('name')
             max_price = form_data.get('max_price')
             categories = form_data.get('category')
+            price_order_by = form_data.get('price_order_by')
 
             if name:
                 listings = listings.filter(product_name__icontains=name)
@@ -112,6 +113,8 @@ class ListingSearchView(View):
                 listings = listings.filter(cost__lte=max_price)
             if categories:
                 listings = listings.filter(category=categories)
+            if price_order_by:
+                listings = listings.order_by(price_order_by)
 
         paginator = Paginator(listings, 10)
         page_number = req.GET.get('page', 1)
@@ -143,7 +146,7 @@ class ListingCreateView(LoginRequiredMixin, View):
             if images_form.is_valid():
                 images_form.save()
                 messages.success(req, 'Listing created successfully!')
-                return redirect(reverse('listing-search'))
+                return redirect(reverse('user-listings'))
             else:
                 messages.error(req, 'Please add correct images to listing!')
                 context = {
