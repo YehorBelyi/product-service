@@ -5,13 +5,20 @@
 {% block title %} {{ listing.product_name }} payment {% endblock %}
 
 {% block container %}
-	<h1 class="my-2 p-2">Create payment</h1>
-	<div class="container d-flex gap-4">
-		<form method="post" action="" class="container shadow rounded order-form w-50 d-flex flex-column align-items-center p-3 mb-3">
-			{% csrf_token %}
-			{{ form|crispy }}
-			<button type="submit" class="btn btn-primary mt-3">Confirm payment</button>
-		</form>
-		{% include 'orders/product_details.html' %}
-	</div>
+	{% if not request.user == listing.user %}
+		<h1 class="my-2 p-2">Create payment</h1>
+		<div class="container d-flex gap-4">
+			<form method="post" action=""
+				  class="container shadow rounded order-form w-50 d-flex flex-column align-items-center p-3 mb-3">
+				{% csrf_token %}
+				{{ form|crispy }}
+				<button type="submit" class="btn btn-primary mt-3">Confirm payment</button>
+			</form>
+			{% include 'orders/product_details.html' %}
+		</div>
+	{% else %}
+		<div class="alert alert-danger mt-3 text-center" role="alert">
+			You can't create an order from your own listing!
+		</div>
+	{% endif %}
 {% endblock %}
