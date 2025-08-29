@@ -78,5 +78,10 @@
 			{% csrf_token %}
 			<button type="submit" class="btn btn-success btn-lg text-center">Confirm payment</button>
 		</form>
+
+		<form action="{% url 'order-confirm-cancel' order_id=order.id %}" method="POST" class="text-center my-3">
+			{% csrf_token %}
+			<button type="submit" class="btn btn-danger">Cancel Payment</button>
+		</form>
 	</div>
 {% endblock %}

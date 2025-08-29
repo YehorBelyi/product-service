@@ -2,11 +2,14 @@
 
 {% load static %}
 
-{% block title %} {{user.name}} Listings | Go&Buy {% endblock %}
+{% block title %} {{ user.name }} Listings | Go&Buy {% endblock %}
 
 {% block container %}
 	<div>
-		<h2>My listings</h2>
+		<div class="d-flex p-2 gap-4 mt-3">
+			<h2>My listings</h2>
+			<a href="{% url 'listing-create' %}" class="btn btn-primary">Create listing</a>
+		</div>
 		{% for listing in page_obj %}
 			<a class="container d-flex shadow rounded my-3 listing-container align-items-center justify-content-between"
 			   href="{% url 'listing-details' listing.pk %}">
