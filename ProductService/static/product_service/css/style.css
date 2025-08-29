@@ -292,3 +292,16 @@ nav .container-fluid {
 .product-order-form div input {
     width: 300px;
 }
+
+.card-img-top {
+    height: 200px;
+    object-fit: cover;
+}
+
+.featured-card {
+    height: 370px !important;
+}
+
+.featured-card-title {
+    overflow-wrap: anywhere;
+}
