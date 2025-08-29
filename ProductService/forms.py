@@ -97,7 +97,7 @@ class ListingSearchForm(forms.Form):
         })
     )
     price_order_by = forms.ChoiceField(
-        label="Price ordering",
+        label="Sorting by Price",
         required=False,
         choices=[('', 'None'),('-cost', 'High to Low'),('cost', 'Low to High')],
         widget=forms.Select(attrs={
