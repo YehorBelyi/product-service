@@ -1,0 +1,25 @@
+{% load static %}
+
+<div id="carouselExample" class="carousel slide p-2 shadow rounded my-3">
+		<div class="ratio ratio-21x9">
+			<div class="carousel-inner h-100">
+				<div class="carousel-item active h-100">
+					<img src="{% static 'product_service/images/first_image.jpeg' %}" class="d-block w-100" alt="...">
+				</div>
+				<div class="carousel-item h-100">
+					<img src="{% static 'product_service/images/second_image.jpg' %}" class="d-block w-100" alt="...">
+				</div>
+				<div class="carousel-item h-100">
+					<img src="{% static 'product_service/images/third_image.jpg' %}" class="d-block w-100" alt="...">
+				</div>
+			</div>
+		</div>
+		<button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">
+			<span class="carousel-control-prev-icon" aria-hidden="true"></span>
+			<span class="visually-hidden">Previous</span>
+		</button>
+		<button class="carousel-control-next" type="button" data-bs-target="#carouselExample" data-bs-slide="next">
+			<span class="carousel-control-next-icon" aria-hidden="true"></span>
+			<span class="visually-hidden">Next</span>
+		</button>
+	</div>

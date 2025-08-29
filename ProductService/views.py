@@ -23,9 +23,12 @@ class HomePageView(View):
     template_name = 'product_service/app/home.html'
 
     def get(self, request):
-        return render(request, self.template_name)
+        random_listings = Listing.objects.filter(is_hidden=False).order_by('?')[:4]
 
-
+        context = {
+            'random_listings': random_listings
+        }
+        return render(request, self.template_name, context)
 class LoginView(View):
     template_name = 'product_service/account/login.html'
 
@@ -143,7 +146,7 @@ class ListingCreateView(LoginRequiredMixin, View):
             if images_form.is_valid():
                 images_form.save()
                 messages.success(req, 'Listing created successfully!')
-                return redirect(reverse('listing-search'))
+                return redirect(reverse('user-listings'))
             else:
                 messages.error(req, 'Please add correct images to listing!')
                 context = {
