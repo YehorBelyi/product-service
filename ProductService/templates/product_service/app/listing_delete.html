@@ -1,12 +1,21 @@
-{% extends 'product_service/app/listing_details.html' %}
-
-{% block title %} Listing Delete | Go&Buy {% endblock %}
-
-{% block modal-window %}
-    <form method="post" action="{% url 'listing-delete' listing.pk %}">
-        {% csrf_token %}
-        <h2>Are you sure?</h2>
-        <a href="{% url 'listing-details' listing.pk %}">Cancel</a>
-        <button type="submit">Delete</button>
-    </form>
-{% endblock %}
+<div class="modal fade" id="deleteListingModal" tabindex="-1" aria-labelledby="deleteListingModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="deleteListingModalLabel">Confirm Delete</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p>Are you sure you want to delete <strong>{{ listing.product_name }}</strong>?</p>
+        <p class="text-muted">This action cannot be undone.</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        <form method="post" action="{% url 'listing-delete' listing.pk %}">
+          {% csrf_token %}
+          <button type="submit" class="btn btn-danger">Delete</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

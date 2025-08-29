@@ -1,6 +1,7 @@
 {% extends 'product_service/template.html' %}
 
 {% load static %}
+{% load crispy_forms_tags %}
 
 {% block title %} {{ listing.product_name }} {% endblock %}
 
@@ -11,9 +12,9 @@
 
 	<div class="container d-flex gap-3 mb-5">
 		<div class="container shadow rounded product-details w-75 d-flex align-items-center flex-column">
-			<div class="listing-details-header">
+			<div class="listing-details-header m-auto">
 				{% if main_image %}
-					<div class="listing-details-images mt-4">
+					<div class="listing-details-images mt-4 d-flex flex-column align-items-center">
 						<div class="main-image">
 							<img src="{{ main_image.image.url }}" alt="Product image" class="listing-details-image">
 						</div>
@@ -28,8 +29,9 @@
 					</div>
 				{% else %}
 					<div class="main-image">
-							<img src="{% static 'product_service/images/no_image.png' %}" alt="Product image" class="listing-details-image">
-						</div>
+						<img src="{% static 'product_service/images/no_image.png' %}" alt="Product image"
+							 class="listing-details-image">
+					</div>
 				{% endif %}
 
 
@@ -57,7 +59,20 @@
 				<h1 class="text-center">
 					{{ listing.cost|floatformat:1 }}$
 				</h1>
-				<a href="{% url 'create-order' listing.pk %}" class="btn order-button text-light">Buy Now</a>
+
+				{% if request.user == listing.user %}
+					<div class="listing-details-update-delete d-flex flex-column align-items-center">
+						<button class="btn btn-secondary mb-2" data-bs-toggle="modal"
+								data-bs-target="#editListingModal">
+							Edit Listing
+						</button>
+						<button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteListingModal">
+							Delete Listing
+						</button>
+					</div>
+				{% else %}
+					<a href="{% url 'create-order' listing.pk %}" class="btn order-button text-light">Buy Now</a>
+				{% endif %}
 			</div>
 			<div class="shipping-methods align-self-start">
 				<p>Shipping methods</p>
@@ -70,16 +85,9 @@
 					<p>Nova Poshta</p>
 				</div>
 			</div>
-			{% if request.user == listing.user %}
-			<div class="listing-details-update-delete">
-				<a href="{% url 'listing-update' listing.pk %}" class="listing-details-update">Edit Listing</a>
-				<a href="{% url 'listing-delete' listing.pk %}" class="listing-details-delete">Delete Listing</a>
-			</div>
-			{% endif %}
-			<div class="modal-window">
-				{% block modal-window %}
-				{% endblock %}
-			</div>
 		</div>
 	</div>
+
+	{% include 'product_service/app/listing_update.html' %}
+	{% include 'product_service/app/listing_delete.html' %}
 {% endblock %}
