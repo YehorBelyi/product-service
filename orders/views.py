@@ -1,4 +1,5 @@
 import stripe
+from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404, redirect
@@ -114,3 +115,12 @@ class OrderCreateView(LoginRequiredMixin, CreateView):
         context['listing'] = product
         context['main_image'] = images[0]
         return context
+
+class OrderConfirmCancelView(View):
+    def post(self, request, *args, **kwargs):
+        order_id = kwargs.get('order_id')
+        order = get_object_or_404(Order, id=order_id)
+        order.delete()
+        error = "Payment was cancelled by the user."
+        request.session['payment_error'] = error
+        return redirect('order_cancel')
