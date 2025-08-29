@@ -90,7 +90,7 @@ class ListingSearchForm(forms.Form):
     category = forms.ModelChoiceField(
         label="Product category",
         required=False,
-        queryset=ProductCategory.objects.all(),
+        queryset=ProductCategory.objects.all().order_by('name'),
         empty_label="None",
         widget=forms.Select(attrs={
             'class': 'dropdown form-select'
