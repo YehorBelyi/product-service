@@ -30,7 +30,7 @@ SECRET_KEY = 'django-insecure-lioleoopda=p%#^7_2tdj%!$d#=_r7s&m+1)uek36fwibj3ywv
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["127.0.0.1", "localhost", "web"]
 
 DOMAIN = 'http://127.0.0.1:8000/'
 
