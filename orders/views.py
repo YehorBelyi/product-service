@@ -14,8 +14,19 @@ from .services import create_checkout_session
 # Create your views here.
 class CreateCheckoutSessionView(View):
     def post(self, request, *args, **kwargs):
-        order_id = kwargs.get('order_id')
-        order = get_object_or_404(Order, id=order_id)
+        order = Order.objects.get_or_create(
+            product=get_object_or_404(Listing, pk=kwargs.get('product_id')),
+            user=request.user,
+            first_name=request.POST.get('first_name'),
+            last_name=request.POST.get('last_name'),
+            email=request.POST.get('email'),
+            address1=request.POST.get('address1'),
+            address2=request.POST.get('address2'),
+            city=request.POST.get('city'),
+            country=request.POST.get('country'),
+            postal_code=request.POST.get('postal_code'),
+            phone=request.POST.get('phone'),
+        )[0]
 
         try:
             checkout_session = create_checkout_session(order)
@@ -28,10 +39,31 @@ class CreateCheckoutSessionView(View):
 class OrderConfirmationView(View):
     template_name = 'orders/order_confirm.html'
 
-    def get(self, request, *args, **kwargs):
-        order_id = kwargs.get('order_id')
-        order = get_object_or_404(Order, id=order_id)
-        return render(request, self.template_name, {'order': order})
+    def post(self, request, *args, **kwargs):
+        product = get_object_or_404(Listing, id=kwargs.get('product_id'))
+        first_name = request.POST.get('first_name')
+        last_name = request.POST.get('last_name')
+        email = request.POST.get('email')
+        phone = request.POST.get('phone')
+        address1 = request.POST.get('address1')
+        address2 = request.POST.get('address2')
+        country = request.POST.get('country')
+        city = request.POST.get('city')
+        postal_code = request.POST.get('postal_code')
+        context = {
+            'listing': product,
+            'first_name': first_name,
+            'last_name': last_name,
+            'email': email,
+            'phone': phone,
+            'address1': address1,
+            'address2': address2,
+            'city': city,
+            'postal_code': postal_code,
+            'country': country,
+        }
+        return render(request, self.template_name, context=context)
+
 
 class OrderSuccessView(View):
     template_name = 'orders/order_success.html'
@@ -51,30 +83,44 @@ class OrderCancelView(View):
         }
         return render(request, self.template_name, context=context)
 
-class OrderCreateView(LoginRequiredMixin, CreateView):
-    model = Order
-    form_class = OrderForm
+# class OrderCreateView(LoginRequiredMixin, CreateView):
+#     model = Order
+#     form_class = OrderForm
+#     template_name = 'orders/order_create.html'
+#
+#     def form_valid(self, form):
+#         product = get_object_or_404(Listing, pk=self.kwargs['product_id'])
+#         form.instance.user = self.request.user
+#         form.instance.product = product
+#         return super().form_valid(form)
+#
+#     def get_success_url(self):
+#         order_id = self.object.pk
+#
+#         return reverse('confirm-order', kwargs={'order_id': order_id})
+#
+#     def get_context_data(self, **kwargs):
+#         context = super().get_context_data(**kwargs)
+#         product_id = self.kwargs['product_id']
+#         product = get_object_or_404(Listing, pk=product_id)
+#         images = product.product_images.all()
+#         context['listing'] = product
+#         context['main_image'] = images[0]
+#         return context
+
+class OrderCreateView(LoginRequiredMixin, View):
     template_name = 'orders/order_create.html'
 
-    def form_valid(self, form):
-        product = get_object_or_404(Listing, pk=self.kwargs['product_id'])
-        form.instance.user = self.request.user
-        form.instance.product = product
-        return super().form_valid(form)
-
-    def get_success_url(self):
-        order_id = self.object.pk
-
-        return reverse('confirm-order', kwargs={'order_id': order_id})
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        product_id = self.kwargs['product_id']
-        product = get_object_or_404(Listing, pk=product_id)
+    def get(self, request, *args, **kwargs):
+        form = OrderForm(request.GET or None)
+        product = get_object_or_404(Listing, pk=kwargs.get('product_id'))
         images = product.product_images.all()
-        context['listing'] = product
-        context['main_image'] = images[0]
-        return context
+        context = {
+            "form": form,
+            "listing": product,
+            'main_image': images[0],
+        }
+        return render(request, self.template_name, context=context)
 
 class OrderConfirmCancelView(View):
     def post(self, request, *args, **kwargs):
