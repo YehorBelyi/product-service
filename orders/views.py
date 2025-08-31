@@ -83,31 +83,6 @@ class OrderCancelView(View):
         }
         return render(request, self.template_name, context=context)
 
-# class OrderCreateView(LoginRequiredMixin, CreateView):
-#     model = Order
-#     form_class = OrderForm
-#     template_name = 'orders/order_create.html'
-#
-#     def form_valid(self, form):
-#         product = get_object_or_404(Listing, pk=self.kwargs['product_id'])
-#         form.instance.user = self.request.user
-#         form.instance.product = product
-#         return super().form_valid(form)
-#
-#     def get_success_url(self):
-#         order_id = self.object.pk
-#
-#         return reverse('confirm-order', kwargs={'order_id': order_id})
-#
-#     def get_context_data(self, **kwargs):
-#         context = super().get_context_data(**kwargs)
-#         product_id = self.kwargs['product_id']
-#         product = get_object_or_404(Listing, pk=product_id)
-#         images = product.product_images.all()
-#         context['listing'] = product
-#         context['main_image'] = images[0]
-#         return context
-
 class OrderCreateView(LoginRequiredMixin, View):
     template_name = 'orders/order_create.html'
 
