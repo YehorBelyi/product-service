@@ -14,7 +14,7 @@
 				{{ form|crispy }}
 				<div class="d-flex align-items-center justify-content-center text-center gap-2 pb-3">
 					<button type="submit" class="btn btn-primary">Continue</button>
-					<a href="{% url 'listing-details' listing.pk %}" class="btn btn-danger">Cancel</a>
+					<a href="javascript:history.back()" class="btn btn-danger">Cancel</a>
 				</div>
 			</form>
 			{% include 'orders/product_details.html' %}
