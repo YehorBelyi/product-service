@@ -85,14 +85,10 @@
 					<input type="text" value="{{ phone }}" class="form-control" readonly disabled>
 				</div>
 			</div>
-			<div class="d-flex align-items-center justify-content-around my-3">
-				<button type="submit" class="btn btn-success btn-lg text-center m-auto">Confirm payment</button>
+			<div class="d-flex align-items-center justify-content-center my-3 gap-2">
+				<button type="submit" class="btn btn-success btn-lg text-center">Confirm payment</button>
+				<a href="javascript:history.back()" class="btn btn-danger">Go Back</a>
 			</div>
 		</form>
-
-		{#    <form action="{% url 'order-confirm-cancel' order_id=order.id %}" method="POST" class="text-center my-3">#}
-		{#       {% csrf_token %}#}
-		{#       <button type="submit" class="btn btn-danger">Cancel Payment</button>#}
-		{#    </form>#}
 	</div>
 {% endblock %}
