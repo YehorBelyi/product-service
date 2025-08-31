@@ -9,79 +9,86 @@
 			class="container d-flex shadow rounded my-3 align-items-center justify-content-between">
 			<div class="product-order-review d-flex align-items-center justify-content-center">
 				<div class="product-order-image">
-					{% with main_image=order.product.product_images.first %}
+					{% with main_image=listing.product_images.first %}
 						{% if main_image %}
-							<img src="{{ main_image.image.url }}" alt="{{ order.product.product_name }} image"
+							<img src="{{ main_image.image.url }}" alt="{{ listing.product_name }} image"
 								 class="rounded">
 						{% else %}
 							<img src="{% static 'product_service/images/no_image.png' %}"
-								 alt="{{ order.product.product_name }} image"
+								 alt="{{ listing.product_name }} image"
 								 class="rounded">
 						{% endif %}
 					{% endwith %}
 				</div>
 				<div class="listing-review-info mx-3 d-flex flex-column justify-content-center">
-					<h2>{{ order.product.product_name }}</h2>
+					<h2>{{ listing.product_name }}</h2>
 				</div>
 			</div>
 			<div class="listing-review-price text-center">
-				<h3>{{ order.product.cost|floatformat:2 }}$</h3>
+				<h3>{{ listing.cost|floatformat:2 }}$</h3>
 			</div>
 		</div>
 		<h1>Order Info</h1>
-		<form class="container shadow rounded p-3 product-order-form">
+		<form action="{% url 'create-checkout-session' listing.pk %}" method="post"
+			  class="container shadow rounded p-3 product-order-form">
+			{% csrf_token %}
+
+			<input type="hidden" name="first_name" value="{{ first_name }}">
+			<input type="hidden" name="last_name" value="{{ last_name }}">
+			<input type="hidden" name="email" value="{{ email }}">
+			<input type="hidden" name="address1" value="{{ address1 }}">
+			<input type="hidden" name="address2" value="{{ address2 }}">
+			<input type="hidden" name="city" value="{{ city }}">
+			<input type="hidden" name="country" value="{{ country }}">
+			<input type="hidden" name="postal_code" value="{{ postal_code }}">
+			<input type="hidden" name="phone" value="{{ phone }}">
+
 			<div class="d-flex align-items-center justify-content-around my-3">
 				<div>
 					<label for="">Firstname</label>
-					<input type="text" value="{{ order.first_name }}" class="form-control" readonly disabled>
+					<input type="text" value="{{ first_name }}" class="form-control" readonly disabled>
 				</div>
 				<div>
 					<label for="">Lastname</label>
-					<input type="text" value="{{ order.last_name }}" class="form-control" readonly disabled>
+					<input type="text" value="{{ last_name }}" class="form-control" readonly disabled>
 				</div>
 				<div>
 					<label for="">Email</label>
-					<input type="text" value="{{ order.email }}" class="form-control" readonly disabled>
+					<input type="text" value="{{ email }}" class="form-control" readonly disabled>
 				</div>
 			</div>
 			<div class="d-flex align-items-center justify-content-around my-3">
 				<div>
 					<label for="">Address 1</label>
-					<input type="text" value="{{ order.address1 }}" class="form-control" readonly disabled>
+					<input type="text" value="{{ address1 }}" class="form-control" readonly disabled>
 				</div>
 				<div>
 					<label for="">Address 2</label>
-					<input type="text" value="{{ order.address2 }}" class="form-control" readonly disabled>
+					<input type="text" value="{{ address2 }}" class="form-control" readonly disabled>
 				</div>
 				<div>
 					<label for="">City</label>
-					<input type="text" value="{{ order.city }}" class="form-control" readonly disabled>
+					<input type="text" value="{{ city }}" class="form-control" readonly disabled>
 				</div>
 			</div>
 			<div class="d-flex align-items-center justify-content-around my-3">
 				<div>
 					<label for="">Country</label>
-					<input type="text" value="{{ order.address1 }}" class="form-control" readonly disabled>
+					<input type="text" value="{{ country }}" class="form-control" readonly disabled>
 				</div>
 				<div>
 					<label for="">Postal Code</label>
-					<input type="text" value="{{ order.address2 }}" class="form-control" readonly disabled>
+					<input type="text" value="{{ postal_code }}" class="form-control" readonly disabled>
 				</div>
 				<div>
 					<label for="">Phone</label>
-					<input type="text" value="{{ order.phone }}" class="form-control" readonly disabled>
+					<input type="text" value="{{ phone }}" class="form-control" readonly disabled>
 				</div>
 			</div>
-		</form>
-
-		<form action="{% url 'create-checkout-session' order_id=order.id %}" method="POST" class="text-center my-3">
-			{% csrf_token %}
-			<button type="submit" class="btn btn-success btn-lg text-center">Confirm payment</button>
-		</form>
-
-		<form action="{% url 'order-confirm-cancel' order_id=order.id %}" method="POST" class="text-center my-3">
-			{% csrf_token %}
-			<button type="submit" class="btn btn-danger">Cancel Payment</button>
+			<div class="d-flex align-items-center justify-content-center my-3 gap-2">
+				<button type="submit" class="btn btn-success btn-lg text-center">Confirm payment</button>
+				<a href="javascript:history.back()" class="btn btn-danger">Go Back</a>
+			</div>
 		</form>
 	</div>
 {% endblock %}
