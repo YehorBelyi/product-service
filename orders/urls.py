@@ -1,6 +1,7 @@
 from django.urls import path
-from .views import CreateCheckoutSessionView, OrderSuccessView, OrderCancelView, OrderCreateView, stripe_webhook_view, \
+from .views import CreateCheckoutSessionView, OrderSuccessView, OrderCancelView, OrderCreateView, \
     OrderConfirmationView, OrderConfirmCancelView
+from .webhooks import stripe_webhook_view
 
 urlpatterns = [
     path('create-checkout-session/<int:order_id>', CreateCheckoutSessionView.as_view(), name='create-checkout-session'),

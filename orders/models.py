@@ -28,6 +28,7 @@ class Order(models.Model):
     stripe_payment_intent_id = models.CharField(max_length=255, blank=True, null=True)
     created_at = models.DateTimeField(default=timezone.now)
     updated_at = models.DateTimeField(auto_now=True)
+    is_paid = models.BooleanField(default=False)
 
     def __str__(self):
         return f"Order #{self.id} - {self.email}"

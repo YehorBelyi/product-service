@@ -1,22 +1,14 @@
-import stripe
-from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse_lazy, reverse
 from django.views import View
 from django.views.generic.edit import CreateView
-from django.conf import settings
-from django.views.decorators.csrf import csrf_exempt
 
 from ProductService.models import Listing, ProductImages
 from .forms import OrderForm
 
 from .models import Order
 from .services import create_checkout_session
-
-stripe.api_key = settings.STRIPE_SECRET_KEY
-webhook_secret = settings.STRIPE_WEBHOOK_SECRET
 
 
 # Create your views here.
@@ -40,38 +32,6 @@ class OrderConfirmationView(View):
         order_id = kwargs.get('order_id')
         order = get_object_or_404(Order, id=order_id)
         return render(request, self.template_name, {'order': order})
-
-
-@csrf_exempt
-def stripe_webhook_view(request):
-    payload = request.body
-    sig_header = request.META.get('HTTP_STRIPE_SIGNATURE')
-    event = None
-
-    try:
-        event = stripe.Webhook.construct_event(
-            payload, sig_header, webhook_secret
-        )
-    except ValueError as e:
-        return HttpResponse(status=400)
-    except stripe.error.SignatureVerificationError as e:
-        return HttpResponse(status=400)
-
-    if event['type'] == 'checkout.session.completed':
-        session = event['data']['object']
-        order_id = session.get('client_reference_id')
-
-        if order_id:
-            try:
-                order = Order.objects.get(id=order_id)
-                order.status = 'processing'
-                order.stripe_payment_intent_id = session.get('stripe_payment_intent_id')
-                order.save()
-            except Order.DoesNotExist:
-                return HttpResponse(status=400)
-
-    return HttpResponse(status=200)
-
 
 class OrderSuccessView(View):
     template_name = 'orders/order_success.html'
