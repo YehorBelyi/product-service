@@ -25,15 +25,17 @@ def stripe_webhook_view(request):
 
     if event['type'] == 'checkout.session.completed':
         session = event['data']['object']
-        order_id = session.get('client_reference_id')
 
-        if order_id:
+        if session.mode == 'payment' and session.payment_status == 'paid':
             try:
+                order_id = session.get('client_reference_id')
                 order = Order.objects.get(id=order_id)
-                order.status = 'processing'
-                order.stripe_payment_intent_id = session.get('stripe_payment_intent_id')
+                order.is_paid = True
                 order.save()
+
             except Order.DoesNotExist:
+                return HttpResponse(status=404)
+            except ValueError:
                 return HttpResponse(status=400)
 
     return HttpResponse(status=200)

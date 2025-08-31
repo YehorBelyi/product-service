@@ -27,6 +27,11 @@
 			</div>
 			<div class="listing-review-price text-center">
 				<span class="badge text-bg-warning">{{ order.status }}</span>
+				{% if order.is_paid %}
+					<span class="badge text-bg-success">Paid</span>
+				{% else %}
+					<span class="badge text-bg-danger">Not Paid</span>
+				{% endif %}
 			</div>
 		</div>
 	{% empty %}
