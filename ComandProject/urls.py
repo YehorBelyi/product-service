@@ -19,15 +19,16 @@ from django.urls import path, include
 from django.conf.urls.static import static
 
 from ComandProject import settings
-from ProductService import views
+from ProductService import views as main_views
+from account import views as account_views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', views.HomePageView.as_view(), name='home'),
-    path('login/', views.LoginView.as_view(), name='login'),
-    path('logout/', views.LogoutView.as_view(), name='logout'),
-    path('register/', views.RegisterView.as_view(), name='register'),
-    path('profile/', views.ProfileView.as_view(), name='profile'),
+    path('', main_views.HomePageView.as_view(), name='home'),
+    path('login/', account_views.LoginView.as_view(), name='login'),
+    path('logout/', account_views.LogoutView.as_view(), name='logout'),
+    path('register/', account_views.RegisterView.as_view(), name='register'),
+    path('profile/', account_views.ProfileView.as_view(), name='profile'),
     path('app/', include('ProductService.urls')),
     path('payment/', include('orders.urls'))
 ]
