@@ -14,4 +14,5 @@ db.sqlite3
 *.sqlite3
 media/
 .env
-stripe.env
+.env.stripe
+.env.postgresql
