@@ -9,6 +9,7 @@ services:
       - .env
     depends_on:
       - stripe-cli
+      - db
     command: >
       sh -c "python manage.py makemigrations &&
              python manage.py migrate &&
@@ -19,6 +20,15 @@ services:
     container_name: stripe-cli
     command: listen --skip-verify --forward-to web:8000/payment/webhooks/stripe/
     env_file:
-      - stripe.env
+      - .env.stripe
     networks:
       - default
+
+  db:
+    container_name: "postgresql"
+    image: postgres
+    restart: always
+    shm_size: 128mb
+    ports:
+      - 5432:5432
+    env_file: .env.postgresql
