@@ -25,7 +25,7 @@ This is a web application for posting products to buy. This is OLX clone, ukrain
 
 ---
 
-### Screenshots
+### 📸 Screenshots
 
 <p align="center">
   <img src="./readme_images/1.png" width="80%" />
